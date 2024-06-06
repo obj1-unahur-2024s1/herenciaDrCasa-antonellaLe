@@ -1,0 +1,62 @@
+import personas.*
+import enfermedades.*
+
+/*1. Una malaria de 500 células amenazadas, una otitis de 100 células amenazadas y un lupus de 10000. 
+2. Otra malaria más pulenta de 800 células amenazadas.
+* * Logan, con temperatura normal (36 grados) y con 3.000.000 de células, habiendo contraído las tres enfermedades del item 1.
+* Frank, con temperatura normal y 3.500.000 células.
+
+* Hacer que Frank contraiga la enfermedad del item 2.
+* Hacer que una malaria (la que contrajo Logan) se reproduzca.
+* Hacer que Logan viva un día de su vida. 
+* Que el sistema permita verificar además:
+  - la cantidad de células de Logan que estén amenazadas por enfermedades agresivas.
+  - la enfermedad de Logan que más células afecte.
+  - si Logan está en coma, lo que sucede si su temperatura es 45° o si tiene menos de 1.000.000 de células. */
+describe "Enfermedades"{
+	//1
+	const malaria = new Infecciosa (cantDeCelulasAmenazadas = 500)
+	const otitis = new Infecciosa (cantDeCelulasAmenazadas = 100)
+	//2
+	const malaria1 = new Infecciosa(cantDeCelulasAmenazadas = 800)
+	//personas
+	const logan = new Persona(lEnfermedades = #{}, temperatura = 36, celulasTotales = 3000000)
+	const frank = new Persona(lEnfermedades = #{}, temperatura = 36, celulasTotales = 3500000)
+
+	method initialize(){
+	logan.contrae(malaria)
+	logan.contrae(otitis)
+	logan.contrae(malaria1)
+	
+	frank.contrae(malaria1)	
+	malaria1.reproducirse()
+	logan.pasaUnDia()
+	}
+	
+test "Cuantas celulas tiene amenazadas Logan por enf agresivas"{
+	assert.equals(0, logan.celulasAmenazadasPorEnfermedadesAgresivas())
+}
+test "Enfermedad que mas celulas afecta"{
+	assert.equals(malaria1, logan.enfermedadMasAmenazante())
+}
+test "Logan esta en coma"{
+	assert.equals(false, logan.estaEnComa())
+}
+test "Esta en coma cuando pasa una semana enfermo y aumentam la cantidad de celulas amenazadas"{
+	malaria.reproducirse()
+	logan.pasaUnDia()
+	logan.pasaUnDia()
+	logan.pasaUnDia()
+	malaria1.reproducirse()
+	logan.pasaUnDia()
+	logan.pasaUnDia()
+	logan.pasaUnDia()
+	logan.pasaUnDia()
+	
+	assert.equals(45,logan.temperatura())
+	assert.equals(true, logan.estaEnComa())
+}
+	
+}
+
+

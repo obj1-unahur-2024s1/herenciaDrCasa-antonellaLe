@@ -1,0 +1,51 @@
+import personas.*
+import enfermedades.*
+//SEGUNDA TEMPORADA //
+/** Hacer que la malaria se atenúe en 100 células y el lupus en 500 células.
+* Hacer que Cameron atienda a Logan.
+* Existen médicos que son jefes de departamento, como House, que cuando tienen que atender a un paciente, no le administran medicación sino que les dicen a uno sus subordinados que lo hagan. Hacer que House atienda a Cameron.
+* Hacer que Cameron contraiga malaria. Hacer que House contraiga malaria. (Y pensar en el method lookup en ambos casos) -> Ojo que los médicos contraen diferente.
+* Hacer que House contraiga la Muerte. La Muerte actúa disminuyendo toda la temperatura de la persona y no se atenúa con ningún medicamento. No afecta ninguna célula (no tiene sentido, ya que afecta a la persona entera) y es extremadamente agresiva (cuack) */
+
+describe "Enfermedades"{
+	//1
+	const malaria = new Infecciosa (cantDeCelulasAmenazadas = 500)
+	const otitis = new Infecciosa (cantDeCelulasAmenazadas = 100)
+	const muerte = new Muerte(cantDeCelulasAmenazadas = 0 )
+	//2
+	const malaria1 = new Infecciosa(cantDeCelulasAmenazadas = 800)
+	//personas
+	const logan = new Persona(lEnfermedades = [], temperatura = 36, celulasTotales = 3000000)
+	const frank = new Persona(lEnfermedades = [], temperatura = 36, celulasTotales = 3500000)
+	//medicos
+	const cameron = new Medico (lEnfermedades = [], temperatura = 36, celulasTotales = 3000000, dosisDeMedicamento = 10)
+	const drHouse = new MedicoJefe (lEnfermedades = [], temperatura = 36, celulasTotales = 3000000, medicoSubordinado = cameron ) 
+	
+	method initialize(){
+	logan.contrae(malaria)
+	logan.contrae(otitis)
+	logan.contrae(malaria1)
+	
+	malaria1.reproducirse()
+	//logan.pasaUnDia()
+	
+	//segunda temporada
+	malaria.disminuyeCantDeCelulasAmenazadas(100)
+	cameron.atenderA(logan) 
+	drHouse.atenderA(cameron)
+	
+	cameron.contrae(malaria)
+	drHouse.contrae(malaria)
+	
+	drHouse.contrae(muerte)
+	
+	}
+test "Cantidad de enfermedades de logan"{
+	assert.equals([malaria, otitis, malaria1], logan.lEnfermedades())
+}	
+
+
+
+}
+
+
